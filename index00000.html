@@ -1,151 +1,171 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Enviar plata</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Manrope', sans-serif;
-      background: #fff;
-      color: #200020;
+    :root{
+      --morado:#200020;
+      --fucsia:#da0081;
+      --rosa:#f49cd2;
+      --suave:#fceffc;
+      --borde:#eee;
+      --txt:#200020;
+      --txt-sec:#444;
+      --fs:15.5px;      /* tamaño base de campos superpuestos */
+      --off-nombre:0px; /* desplazamiento extra cuando el nombre tiene varias líneas */
     }
-    .container {
-      padding: 20px;
-      max-width: 400px;
-      margin: 0 auto;
+    *{box-sizing:border-box}
+    html,body{margin:0;background:#fff;color:var(--txt);font-family:'Manrope',sans-serif}
+
+    /* ======== UI del formulario ======== */
+    .screen{min-height:100dvh;display:flex;flex-direction:column}
+    header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px}
+    .icon-btn{width:28px;height:28px;border:0;background:transparent;cursor:pointer;color:#261329;display:grid;place-items:center}
+    .icon-btn svg{width:22px;height:22px}
+
+    .container{padding:0 18px 24px;max-width:480px;margin:0 auto;width:100%}
+    h1{font-size:24px;font-weight:700;line-height:1.2;margin:0 0 16px}
+    .help{font-size:13px;color:var(--txt-sec);margin:8px 0 14px}
+
+    .label{font-size:14px;margin:14px 0 8px 2px;color:#261329}
+    .field{margin-top:14px}
+    .input{
+      width:100%;padding:14px;border-radius:10px;border:none;background:var(--suave);
+      font-size:16px;color:#000;outline:none;
     }
-    h1 {
-      font-size: 24px;
-      font-weight: 700;
+    .row{display:flex;gap:10px;align-items:center}
+
+    .section-title{margin-top:18px;font-weight:700;color:#d10083}
+    .card-row{
+      margin-top:10px;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.08);
+      padding:12px 14px;display:flex;align-items:center;gap:12px
     }
-    .input-group {
-      margin-top: 20px;
+    .card-icon{width:40px;height:40px;border-radius:10px;background:var(--fucsia);display:grid;place-items:center}
+    .mini{width:20px;height:20px;display:grid;gap:3px;grid-template-columns:repeat(2,1fr)}
+    .mini span{display:block;width:100%;height:100%;background:#ffd2ec;border-radius:2px}
+    .chev{margin-left:auto}
+    .chev svg{width:22px;height:22px;color:#261329}
+
+    .cta{position:sticky;bottom:0;left:0;right:0;background:linear-gradient(180deg,transparent,#fff 18%,#fff 100%);padding:16px 18px 22px;margin-top:auto}
+    .btn{
+      width:100%;padding:16px;background:var(--rosa);color:#fff;font-size:18px;font-weight:bold;
+      border:none;border-radius:12px;cursor:pointer
     }
-    .input-group label {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 5px;
+
+    /* ======== Animación diamantes ======== */
+    .anim-overlay{position:fixed;inset:0;background:#fff;display:none;align-items:center;justify-content:center;z-index:50}
+    .diamantes{position:relative;width:160px;height:120px}
+    .diamond{
+      position:absolute;width:70px;height:70px;background:var(--fucsia);
+      transform:rotate(45deg) scale(0);border-radius:12px;animation:pop .8s ease forwards;
+      box-shadow:0 8px 28px rgba(218,0,129,.35)
     }
-    .input-group input, .input-group textarea {
-      width: 100%;
-      padding: 14px;
-      border-radius: 10px;
-      border: none;
-      background: #fceffc;
-      font-size: 16px;
-      color: #000;
+    .diamond.left{left:12px;top:25px}
+    .diamond.right{left:78px;top:25px;animation-delay:.15s}
+    .spark{position:absolute;width:10px;height:10px;background:#ffb9e1;border-radius:2px;transform:rotate(45deg) scale(0);animation:spark .9s ease forwards .3s}
+    .spark.s1{left:4px;top:-6px}.spark.s2{right:-8px;top:0}.spark.s3{left:40px;bottom:-10px}
+    @keyframes pop{0%{transform:rotate(45deg) scale(0)}55%{transform:rotate(45deg) scale(1.08)}100%{transform:rotate(45deg) scale(1)}}
+    @keyframes spark{0%{transform:rotate(45deg) scale(0);opacity:0}60%{transform:rotate(45deg) scale(1.4);opacity:1}100%{transform:rotate(45deg) scale(.9);opacity:0}}
+
+    /* ======== Comprobante ======== */
+    #captura{display:none;position:relative;margin:16px auto 24px;width:min(100vw,390px)}
+    #captura img{width:100%;display:block}
+
+    .input-overlay{
+      position:absolute;background:transparent;border:none;font-size:var(--fs);
+      color:#3C114B;font-weight:500;pointer-events:none;appearance:none;-webkit-appearance:none;
+      padding:0;margin:0;line-height:1.2;font-family:'Manrope',sans-serif;
     }
-    .info {
-      font-size: 13px;
-      color: #444;
-      margin-top: 5px;
+
+    /* Nombre ILIMITADO (envolvente) */
+    #nombre{
+      white-space: normal;        /* permite varias líneas */
+      word-break: break-word;     /* corta palabras muy largas si es necesario */
+      overflow: visible;
+      width: calc(330px * var(--escala)); /* ancho de texto dentro del comprobante */
     }
-    .fuente-box {
-      margin-top: 30px;
-      border: 1px solid #eee;
-      border-radius: 12px;
-      padding: 12px;
-      display: flex;
-      align-items: center;
-    }
-    .fuente-icon {
-      width: 40px;
-      height: 40px;
-      background: #da0081;
-      border-radius: 10px;
-      margin-right: 10px;
-    }
-    .fuente-label {
-      font-weight: 500;
-    }
-    .boton {
-      margin-top: 30px;
-      width: 100%;
-      padding: 16px;
-      background: #f49cd2;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-    }
-    #captura {
-      display: none;
-      position: relative;
-      max-width: 390px;
-      margin: 20px auto;
-    }
-    #captura img {
-      width: 100%;
-    }
-    .input-overlay {
-      position: absolute;
-      background: transparent;
-      border: none;
-      font-size: 14px;
-      color: #3C114B;
-      font-weight: 500;
-      font-family: 'Manrope', sans-serif;
-      pointer-events: none;
-    }
-    #nombre {
-      top: calc(367px * var(--escala));
-      left: calc((30px) * var(--escala));
-    }
-    #valor {
-      top: calc((425px) * var(--escala));
-      left: calc((30px) * var(--escala));
-    }
-    #nequi {
-      top: calc((484px) * var(--escala));
-      left: calc((30px) * var(--escala));
-    }
-    #fecha {
-      top: calc((540px) * var(--escala));
-      left: calc((30px) * var(--escala));
-    }
-    #referencia {
-      top: calc((600px) * var(--escala));
-      left: calc((30px) * var(--escala));
-    }
-    #disponible {
-      top: calc((658px) * var(--escala));
-      left: calc((30px) * var(--escala));
-      font-size: 15px;
-    }
+
+    /* Coordenadas base 390px; los demás campos se desplazan con --off-nombre */
+    #nombre{     top: calc(367px * var(--escala)); left: calc(30px * var(--escala)); }
+    #valor{      top: calc(425px * var(--escala) + var(--off-nombre)); left: calc(30px * var(--escala)); width: calc(330px * var(--escala)); }
+    #nequi{      top: calc(484px * var(--escala) + var(--off-nombre)); left: calc(30px * var(--escala)); width: calc(330px * var(--escala)); }
+    #fecha{      top: calc(540px * var(--escala) + var(--off-nombre)); left: calc(30px * var(--escala)); width: calc(330px * var(--escala)); }
+    #referencia{ top: calc(600px * var(--escala) + var(--off-nombre)); left: calc(30px * var(--escala)); width: calc(330px * var(--escala)); }
+    #disponible{ top: calc(658px * var(--escala) + var(--off-nombre)); left: calc(30px * var(--escala)); }
   </style>
 </head>
 <body>
-  <div class="container" id="formulario">
-    <h1>Envía plata</h1>
-    <div class="input-group">
-      <label for="nequi">Cel</label>
-      <input type="text" id="input-nequi" placeholder="Cel">
-      <div class="info">Revisa bien el número para enviarle a la persona correcta</div>
+  <!-- ======== FORMULARIO ======== -->
+  <div class="screen" id="form-screen">
+    <header>
+      <button class="icon-btn" aria-label="Volver">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Más">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8l6 6 6-6"/></svg>
+      </button>
+    </header>
+
+    <div class="container">
+      <h1>Envía plata</h1>
+
+      <div class="field">
+        <div class="label">Cel</div>
+        <div class="row">
+          <input class="input" id="input-nequi" type="tel" inputmode="numeric" placeholder="Cel" maxlength="12" />
+          <button class="icon-btn" title="Contactos" type="button" aria-label="Contactos">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 11c0 2.21-1.79 4-4 4s-4-1.79-4-4 1.79-4 4-4 4 1.79 4 4z"/>
+              <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+              <path d="M18 8l2-2M18 6l2 2"/>
+            </svg>
+          </button>
+        </div>
+        <div class="help">Revisa bien el número para enviarle a la persona correcta</div>
+      </div>
+
+      <div class="field">
+        <div class="label">¿Cuánto?</div>
+        <input class="input" id="input-valor" type="tel" inputmode="numeric" placeholder="¿Cuánto?" />
+      </div>
+
+      <div class="field">
+        <div class="label">Mensaje</div>
+        <input class="input" id="input-nombre" type="text" placeholder="Mensaje" />
+      </div>
+
+      <div class="section-title">Escoge de donde saldrá la plata</div>
+      <div class="card-row">
+        <div class="card-icon"><div class="mini"><span></span><span></span><span></span><span></span></div></div>
+        <strong>Disponible</strong>
+        <div class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div>
+      </div>
     </div>
-    <div class="input-group">
-      <label for="valor">¿Cuánto?</label>
-      <input type="text" id="input-valor" placeholder="¿Cuánto?">
-    </div>
-    <div class="input-group">
-      <label for="nombre">Mensaje</label>
-      <input type="text" id="input-nombre" placeholder="Nombre del destinatario">
-    </div>
-    <div class="fuente-box">
-      <div class="fuente-icon"></div>
-      <div class="fuente-label">Disponible</div>
-    </div>
-    <button class="boton" id="sigue">Sigue</button>
+
+    <div class="cta"><button class="btn" id="sigue">Sigue</button></div>
   </div>
 
+  <!-- ======== ANIMACIÓN DIAMANTES ======== -->
+  <div class="anim-overlay" id="anim">
+    <div class="diamantes">
+      <div class="diamond left"></div>
+      <div class="diamond right"></div>
+      <div class="spark s1"></div>
+      <div class="spark s2"></div>
+      <div class="spark s3"></div>
+    </div>
+  </div>
+
+  <!-- ======== COMPROBANTE ======== -->
   <div id="captura">
-    <img src="comprobante_base.png" alt="Fondo">
-    <input type="text" id="nombre" class="input-overlay" readonly>
+    <img src="comprobante_base.png" alt="Fondo del comprobante">
+    <!-- Ahora NOMBRE es un DIV para poder envolver en múltiples líneas -->
+    <div id="nombre" class="input-overlay"></div>
     <input type="text" id="valor" class="input-overlay" readonly>
     <input type="text" id="nequi" class="input-overlay" readonly>
     <div id="fecha" class="input-overlay"></div>
@@ -154,60 +174,114 @@
   </div>
 
   <script>
-    const formulario = document.getElementById("formulario");
-    const captura = document.getElementById("captura");
+    const formScreen = document.getElementById('form-screen');
+    const captura = document.getElementById('captura');
+    const anim = document.getElementById('anim');
+    const imgBase = captura.querySelector('img');
 
-    document.getElementById("sigue").addEventListener("click", () => {
-      const nombre = document.getElementById("input-nombre").value.trim();
-      const valor = document.getElementById("input-valor").value.trim();
-      const nequi = document.getElementById("input-nequi").value.trim();
-      if (!nombre || !valor || !nequi) {
-        alert("Por favor completa todos los campos.");
-        return;
-      }
+    const inputNombre = document.getElementById('input-nombre');
+    const inputValor  = document.getElementById('input-valor');
+    const inputNequi  = document.getElementById('input-nequi');
 
-      const escala = Math.min(window.innerWidth / 390, 1);
-      captura.style.setProperty('--escala', escala);
-      document.getElementById('nombre').value = nombre;
-      document.getElementById('valor').value = `$ ${valor.replace(/\B(?=(\d{3})+(?!\d))/g, ".")},00`;
-      document.getElementById('nequi').value = nequi;
-      document.getElementById('referencia').value = 'M' + Math.floor(1e7 + Math.random() * 9e7);
-      generarFecha();
-
-      formulario.style.display = "none";
-      captura.style.display = "block";
-      captura.requestFullscreen?.();
+    // Máscara celular
+    inputNequi.addEventListener('input', (e)=>{
+      const digits = e.target.value.replace(/\D/g,'').slice(0,10);
+      let out = '';
+      if (digits.length <= 3) out = digits;
+      else if (digits.length <= 6) out = digits.slice(0,3) + ' ' + digits.slice(3);
+      else out = digits.slice(0,3) + ' ' + digits.slice(3,6) + ' ' + digits.slice(6);
+      e.target.value = out;
     });
 
-    function generarFecha() {
+    // Formato miles
+    inputValor.addEventListener('input', (e)=>{
+      const digits = e.target.value.replace(/\D/g,'');
+      e.target.value = digits ? digits.replace(/\B(?=(\d{3})+(?!\d))/g,'.') : '';
+    });
+
+    // Escala y tamaño dinámico de fuente
+    function actualizarEscala(){
+      const ancho = captura.clientWidth || imgBase.clientWidth;
+      const escala = Math.min(ancho / 390, 1);
+      captura.style.setProperty('--escala', escala);
+      const tamaño = Math.max(14, 15.5 * escala);
+      document.documentElement.style.setProperty('--fs', tamaño + 'px');
+    }
+    imgBase.addEventListener('load', actualizarEscala);
+    window.addEventListener('resize', ()=>{ if(captura.style.display==='block') { actualizarEscala(); recalcularOffsets(); } });
+
+    // Fecha del comprobante
+    function generarFecha(){
       const fecha = new Date();
-      const meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
-      const dia = fecha.getDate().toString().padStart(2,'0');
+      const meses=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+      const dia = String(fecha.getDate()).padStart(2,'0');
       const mes = meses[fecha.getMonth()];
       const anio = fecha.getFullYear();
-      let h = fecha.getHours(),
-          m = fecha.getMinutes().toString().padStart(2,'0'),
-          ampm = h >= 12 ? 'p. m.' : 'a. m.';
-      h = h % 12 || 12;
-      document.getElementById('fecha').innerHTML = `${dia} de ${mes} de ${anio} a las ${h}:${m} ${ampm}`;
+      let h = fecha.getHours(), m = String(fecha.getMinutes()).padStart(2,'0'), ampm = h>=12 ? 'p. m.' : 'a. m.';
+      h = h%12 || 12;
+      document.getElementById('fecha').textContent = `${dia} de ${mes} de ${anio} a las ${h}:${m} ${ampm}`;
     }
 
-    // Deslizar hacia abajo para volver al formulario
-    let startY = 0;
-    document.addEventListener('touchstart', e => {
-      startY = e.touches[0].clientY;
+    // Recalcula cuánto desplazamiento extra necesitan los campos debajo del nombre
+    function recalcularOffsets(){
+      const nombreEl = document.getElementById('nombre');
+      const cs = getComputedStyle(nombreEl);
+      const lineH = parseFloat(cs.lineHeight);            // px
+      const h = nombreEl.scrollHeight;                    // alto real
+      const extra = Math.max(0, h - lineH);               // extra por líneas adicionales
+      document.documentElement.style.setProperty('--off-nombre', extra + 'px');
+    }
+
+    // Flujo: Sigue -> animación -> comprobante
+    document.getElementById('sigue').addEventListener('click', ()=>{
+      const nombre = inputNombre.value.trim();
+      const valor  = inputValor.value.trim();
+      const nequi  = inputNequi.value.trim();
+
+      if(!nequi || nequi.replace(/\D/g,'').length!==10){ alert('Escribe un número de 10 dígitos (ej: 320 972 2138)'); return; }
+      if(!valor){ alert('Escribe el valor'); return; }
+      if(!nombre){ alert('Escribe el mensaje'); return; }
+
+      anim.style.display='flex';
+
+      setTimeout(()=>{
+        anim.style.display='none';
+        formScreen.style.display='none';
+        captura.style.display='block';
+
+        actualizarEscala();
+
+        // Rellenar datos del comprobante
+        document.getElementById('nombre').textContent = nombre;   // ahora es DIV multi-línea
+        document.getElementById('valor').value  = `$ ${valor.replace(/\B(?=(\d{3})+(?!\d))/g,".")},00`;
+        document.getElementById('nequi').value  = nequi;
+        document.getElementById('referencia').value = 'M' + Math.floor(1e7 + Math.random()*9e7);
+        generarFecha();
+
+        // Tras colocar el nombre, medir y desplazar abajo el resto
+        requestAnimationFrame(()=>{ recalcularOffsets(); });
+
+        captura.requestFullscreen?.();
+      },1200);
     });
-    document.addEventListener('touchmove', e => {
+
+    // Deslizar para volver
+    let startY=0;
+    document.addEventListener('touchstart', e=>{ startY = e.touches[0].clientY; });
+    document.addEventListener('touchmove', e=>{
       const deltaY = e.touches[0].clientY - startY;
-      if (deltaY > 80 && captura.style.display === 'block') {
-        captura.style.display = 'none';
-        formulario.style.display = 'block';
-        if (document.fullscreenElement) {
-          document.exitFullscreen();
-        }
+      if(deltaY>80 && captura.style.display==='block'){
+        captura.style.display='none';
+        formScreen.style.display='flex';
+        if(document.fullscreenElement) document.exitFullscreen();
       }
     });
+
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(()=>{
+        if(captura.style.display==='block'){ actualizarEscala(); recalcularOffsets(); }
+      });
+    }
   </script>
 </body>
 </html>
-
