@@ -15,52 +15,39 @@
       --suave:#fceffc;
       --txt:#200020;
       --txt-sec:#444;
-      --baseW:390;      /* ancho base del arte del comprobante */
-      --fs:15.5px;      /* tamaño base de texto sobrepuesto (fijo) */
+      --baseW:390;   /* ancho base del comprobante (F I J O) */
+      --fs:15.5px;  /* tamaño base del texto sobrepuesto (F I J O) */
     }
     *{box-sizing:border-box}
     html,body{margin:0;background:#fff;color:var(--txt);font-family:'Manrope',sans-serif;overscroll-behavior:none}
 
-    /* ======== UI del formulario ======== */
+    /* ===== Formulario ===== */
     .screen{min-height:100dvh;display:flex;flex-direction:column}
     header{display:flex;align-items:center;justify-content:space-between;padding:16px 18px}
     .icon-btn{width:28px;height:28px;border:0;background:transparent;cursor:pointer;color:#261329;display:grid;place-items:center}
     .icon-btn svg{width:22px;height:22px}
-
     .container{padding:0 18px 24px;max-width:480px;margin:0 auto;width:100%}
     h1{font-size:24px;font-weight:700;line-height:1.2;margin:0 0 16px}
     .help{font-size:13px;color:var(--txt-sec);margin:8px 0 14px}
-
     .label{font-size:14px;margin:14px 0 8px 2px;color:#261329}
     .field{margin-top:14px}
-    .input{
-      width:100%;padding:14px;border-radius:10px;border:none;background:var(--suave);
-      font-size:16px;color:#000;outline:none;
-    }
+    .input{width:100%;padding:14px;border-radius:10px;border:none;background:var(--suave);font-size:16px;color:#000;outline:none}
     .row{display:flex;gap:10px;align-items:center}
-
     .section-title{margin-top:18px;font-weight:700;color:#d10083}
-    .card-row{
-      margin-top:10px;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.08);
-      padding:12px 14px;display:flex;align-items:center;gap:12px
-    }
+    .card-row{margin-top:10px;background:#fff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.08);padding:12px 14px;display:flex;align-items:center;gap:12px}
     .card-icon{width:40px;height:40px;border-radius:10px;background:var(--fucsia);display:grid;place-items:center}
     .mini{width:20px;height:20px;display:grid;gap:3px;grid-template-columns:repeat(2,1fr)}
     .mini span{display:block;width:100%;height:100%;background:#ffd2ec;border-radius:2px}
     .chev{margin-left:auto}
     .chev svg{width:22px;height:22px;color:#261329}
-
     .cta{position:sticky;bottom:0;left:0;right:0;background:linear-gradient(180deg,transparent,#fff 18%,#fff 100%);padding:16px 18px 22px;margin-top:auto}
-    .btn{
-      width:100%;padding:16px;background:var(--rosa);color:#fff;font-size:18px;font-weight:bold;
-      border:none;border-radius:12px;cursor:pointer
-    }
+    .btn{width:100%;padding:16px;background:var(--rosa);color:#fff;font-size:18px;font-weight:bold;border:none;border-radius:12px;cursor:pointer}
 
-    /* ======== OVERLAY: diamantes (BLANCO) + botón ======== */
+    /* ===== Overlay animación (BLANCO) ===== */
     .finish-overlay{
-      position:fixed;inset:0;background:#fff;
-      display:none;align-items:center;justify-content:center;flex-direction:column;
-      gap:24px;z-index:1200;text-align:center;padding:24px
+      position:fixed;inset:0;background:#fff;display:none;
+      align-items:center;justify-content:center;flex-direction:column;gap:24px;
+      z-index:1200;text-align:center;padding:24px
     }
     .diamantes{position:relative;width:160px;height:120px}
     .diamond{
@@ -75,51 +62,36 @@
     @keyframes pop{0%{transform:rotate(45deg) scale(0)}55%{transform:rotate(45deg) scale(1.08)}100%{transform:rotate(45deg) scale(1)}}
     @keyframes spark{0%{transform:rotate(45deg) scale(0);opacity:0}60%{transform:rotate(45deg) scale(1.4);opacity:1}100%{transform:rotate(45deg) scale(.9);opacity:0}}
 
-    .btn-finish{
-      border:none;border-radius:12px;padding:14px 16px;cursor:pointer;
-      font-weight:800;font-size:16px;color:#000;background:#fff;
-      box-shadow:0 6px 16px rgba(0,0,0,.1);min-width:260px
-    }
-    .btn-finish:disabled{opacity:.4;pointer-events:none}
-
-    /* ======== VISOR (NEGRO, FIJO) ======== */
+    /* ===== Visor comprobante (NEGRO, fijo) ===== */
     #captura.viewer{
-      display:none;position:fixed;inset:0;background:#000;
-      z-index:1100;overflow:hidden;touch-action:none;
+      display:none;position:fixed;inset:0;background:#000;z-index:1100;
+      overflow:hidden;touch-action:none;
     }
     .stage{
       position:absolute;left:50%;top:50%;
-      transform:translate(-50%,-50%) scale(1);   /* escala 1 fuera de FS; en FS se ajusta por JS */
+      transform:translate(-50%, -50%) scale(1);   /* escala 1 fuera de FS; en FS se ajusta por JS */
       transform-origin:center center;
-      width:calc(var(--baseW) * 1px);            /* 390px exactos */
+      width:calc(var(--baseW) * 1px);             /* 390px exactos */
     }
-    .bg{
-      display:block;width:calc(var(--baseW) * 1px);height:auto;
-      user-select:none;-webkit-user-drag:none;pointer-events:none;
-    }
+    .bg{display:block;width:calc(var(--baseW) * 1px);height:auto;user-select:none;-webkit-user-drag:none;pointer-events:none}
     .bottom-edge-mask{position:absolute;left:0;right:0;bottom:0;height:14px;background:#000;z-index:5;pointer-events:none}
 
-    /* ======== Campos SOBREpuestos FIJOS (px) ======== */
+    /* Capas sobrepuestas FIJAS (px) */
     .input-overlay{
       position:absolute;background:transparent;border:none;font-size:var(--fs);
       color:#3C114B;font-weight:500;pointer-events:none;appearance:none;-webkit-appearance:none;
       padding:0;margin:0;line-height:1.2;font-family:'Manrope',sans-serif;
     }
-    /* NOMBRE: multilínea sin mover a los demás */
-    #nombre{
-      top:367px; left:30px; width:330px;
-      white-space:normal; word-break:break-word; overflow:visible;
-    }
-    /* Coordenadas FIJAS (no cambian jamás) */
-    #valor{      top:425px; left:30px; width:330px; }
-    #nequi{      top:484px; left:30px; width:330px; }
-    #fecha{      top:540px; left:30px; width:330px; }
-    #referencia{ top:600px; left:30px; width:330px; }
-    #disponible{ top:658px; left:30px; }
+    #nombre{top:367px;left:30px;width:330px;white-space:normal;word-break:break-word;overflow:visible}
+    #valor{top:425px;left:30px;width:330px}
+    #nequi{top:484px;left:30px;width:330px}
+    #fecha{top:540px;left:30px;width:330px}
+    #referencia{top:600px;left:30px;width:330px}
+    #disponible{top:658px;left:30px}
   </style>
 </head>
 <body>
-  <!-- ======== FORMULARIO ======== -->
+  <!-- ===== Formulario ===== -->
   <div class="screen" id="form-screen">
     <header>
       <button class="icon-btn" id="btnBack" aria-label="Volver">
@@ -137,7 +109,7 @@
         <div class="label">Cel</div>
         <div class="row">
           <input class="input" id="input-nequi" type="tel" inputmode="numeric" placeholder="Cel" maxlength="12" />
-          <button class="icon-btn" title="Contactos" type="button" aria-label="Contactos">
+          <button class="icon-btn" type="button" aria-label="Contactos">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M16 11c0 2.21-1.79 4-4 4s-4-1.79-4-4 1.79-4 4-4 4 1.79 4 4z"/>
               <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
@@ -169,7 +141,7 @@
     <div class="cta"><button class="btn" id="sigue">Sigue</button></div>
   </div>
 
-  <!-- ======== OVERLAY: Diamantes + Botón (BLANCO) ======== -->
+  <!-- ===== Overlay animación (BLANCO) ===== -->
   <div id="finish" class="finish-overlay" aria-hidden="true">
     <div class="diamantes" aria-hidden="true">
       <div class="diamond left"></div>
@@ -178,14 +150,12 @@
       <div class="spark s2"></div>
       <div class="spark s3"></div>
     </div>
-    <button id="btnVer" class="btn-finish" type="button" disabled>Ver comprobante en pantalla completa</button>
   </div>
 
-  <!-- ======== VISOR COMPROBANTE (NEGRO) ======== -->
+  <!-- ===== Visor comprobante (NEGRO) ===== -->
   <div id="captura" class="viewer" aria-hidden="true">
     <div class="stage" id="stage">
       <img class="bg" id="bg" src="comprobante_base.png" alt="Fondo del comprobante">
-      <!-- CAPAS FIJAS -->
       <div id="nombre" class="input-overlay"></div>
       <input type="text" id="valor" class="input-overlay" readonly>
       <input type="text" id="nequi" class="input-overlay" readonly>
@@ -201,7 +171,6 @@
     const captura    = document.getElementById('captura');
     const stage      = document.getElementById('stage');
     const finish     = document.getElementById('finish');
-    const btnVer     = document.getElementById('btnVer');
     const btnBack    = document.getElementById('btnBack');
     const imgBase    = document.getElementById('bg');
 
@@ -210,10 +179,9 @@
     const inputNequi  = document.getElementById('input-nequi');
 
     const BASE_W = 390;
-    let BASE_H = null;    // se calcula cuando carga la imagen
-    let inFS   = false;   // estamos en fullscreen
+    let BASE_H = null;
+    let inFS   = false;
 
-    /* ======== Alto base desde la imagen (para escalar en FS) ======== */
     function setBaseHeight(){
       if(imgBase.naturalWidth && imgBase.naturalHeight){
         BASE_H = BASE_W * (imgBase.naturalHeight / imgBase.naturalWidth);
@@ -222,19 +190,17 @@
     if (imgBase.complete) setBaseHeight();
     imgBase.addEventListener('load', setBaseHeight);
 
-    /* ======== Máscara celular ======== */
+    /* Máscaras de entrada */
     inputNequi.addEventListener('input', (e)=>{
       const d = e.target.value.replace(/\D/g,'').slice(0,10);
       e.target.value = d.length<=3 ? d : d.length<=6 ? d.slice(0,3)+' '+d.slice(3) : d.slice(0,3)+' '+d.slice(3,6)+' '+d.slice(6);
     });
-
-    /* ======== Formato miles ======== */
     inputValor.addEventListener('input', (e)=>{
       const digits = e.target.value.replace(/\D/g,'');
       e.target.value = digits ? digits.replace(/\B(?=(\d{3})+(?!\d))/g,'.') : '';
     });
 
-    /* ======== Fecha ======== */
+    /* Fecha */
     function generarFecha(){
       const f=new Date();
       const meses=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
@@ -245,11 +211,11 @@
       document.getElementById('fecha').textContent=`${dia} de ${mes} de ${anio} a las ${h}:${m} ${ampm}`;
     }
 
-    /* ======== Escala en fullscreen: sólo escala el contenedor .stage ======== */
+    /* Escala fullscreen (sólo escala el contenedor .stage) */
     function scaleToFullscreen(){
       const vw = window.innerWidth;
       const vh = window.innerHeight;
-      const hBase = BASE_H || BASE_W*2; // fallback aproximado si aún no cargó la imagen
+      const hBase = BASE_H || BASE_W*2;
       const s = Math.min(vw/BASE_W, vh/hBase);
       stage.style.transform = `translate(-50%, -50%) scale(${s})`;
     }
@@ -260,7 +226,7 @@
     window.addEventListener('resize', ()=>{ if(inFS) scaleToFullscreen(); });
     window.addEventListener('orientationchange', ()=>{ if(inFS) setTimeout(scaleToFullscreen, 50); });
 
-    /* ======== Fullscreen helpers ======== */
+    /* FS helpers */
     async function enterFS(el){
       const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
       if(req){ try{ await req.call(el); }catch{} }
@@ -270,19 +236,38 @@
         try{ await document.exitFullscreen(); }catch{}
       }
     }
+
+    /* Ir directo al formulario (sin “medio mostrar” nada) */
+    function irAlFormulario(){
+      finish.style.display='none';
+      captura.style.display='none';
+      formScreen.style.display='flex';
+      document.body.style.background='#fff';
+      document.body.style.overflow='auto';
+      inFS=false;
+      scaleToNormal();
+      try{ history.replaceState({screen:'form'},''); }catch{}
+    }
+
+    /* Cuando cambia fullscreen:
+       - Si ENTRA a FS, ajusta escala.
+       - Si SALE de FS, volvemos DIRECTO al formulario (evita que quede medio visible). */
     document.addEventListener('fullscreenchange', ()=>{
       inFS = !!document.fullscreenElement;
-      if(inFS) scaleToFullscreen();
-      else     scaleToNormal();
+      if(inFS) { scaleToFullscreen(); }
+      else {
+        // Si el visor estaba abierto, cerramos y volvemos al form.
+        if (captura.style.display === 'block') irAlFormulario();
+      }
     });
 
-    /* ======== Flujo: Sigue -> diamantes + botón -> visor ======== */
+    /* Flujo: Sigue -> diamantes (blanco) -> auto fullscreen con comprobante */
     document.getElementById('sigue').addEventListener('click', ()=>{
       const nombre = inputNombre.value.trim();
       const valor  = inputValor.value.trim();
       const nequi  = inputNequi.value.trim();
 
-      if(!nequi || nequi.replace(/\D/g,'').length!==10){ alert('Escribe un número de 10 dígitos (ej: 320 972 2138)'); return; }
+      if(!nequi || nequi.replace(/\D/g,'').length!==10){ alert('Escribe un número de 10 dígitos'); return; }
       if(!valor){ alert('Escribe el valor'); return; }
       if(!nombre){ alert('Escribe el mensaje'); return; }
 
@@ -295,58 +280,53 @@
       document.getElementById('referencia').value   = 'M' + Math.floor(1e7 + Math.random()*9e7);
       generarFecha();
 
-      // Overlay blanco + botón
+      // Animación blanca
       finish.style.display='flex';
       finish.setAttribute('aria-hidden','false');
-      btnVer.disabled = true;
-      setTimeout(()=>{ btnVer.disabled = false; }, 1000);
-    });
 
-    // Botón: ver en pantalla completa
-    btnVer.addEventListener('click', async ()=>{
-      finish.style.display='none';
-      finish.setAttribute('aria-hidden','true');
+      // Tras la animación: abrir visor, pedir fullscreen automáticamente
+      setTimeout(async ()=>{
+        finish.style.display='none';
+        finish.setAttribute('aria-hidden','true');
 
-      formScreen.style.display='none';
-      captura.style.display='block';
-      document.body.style.background = '#000';
-      document.body.style.overflow = 'hidden';
+        formScreen.style.display='none';
+        captura.style.display='block';
+        document.body.style.background = '#000';
+        document.body.style.overflow = 'hidden';
 
-      // Fullscreen y escala para llenar pantalla (campos permanecen en mismas coordenadas relativas)
-      await enterFS(captura);
-      if(!document.fullscreenElement){ // si FS no se concede, igual ajusta al viewport
-        inFS = true; scaleToFullscreen();
-      }
-    });
-
-    /* ======== Interacción visor ======== */
-    // Tap: alterna FS sin mover nada
-    captura.addEventListener('click', async ()=>{
-      if(document.fullscreenElement){ await exitFS(); }
-      else{
         await enterFS(captura);
-        if(!document.fullscreenElement){ inFS = true; scaleToFullscreen(); }
+        if(!document.fullscreenElement){
+          // Si el navegador bloquea FS, intentamos llenar pantalla con escala.
+          inFS = true;
+          scaleToFullscreen();
+        }
+      }, 1000);
+    });
+
+    /* Interacción visor:
+       - Si está en FS y se toca, salir a formulario.
+       - Si NO está en FS (caso bloqueo), reintenta FS; si no entra, va al formulario. */
+    captura.addEventListener('click', async ()=>{
+      if(document.fullscreenElement){
+        await exitFS(); // fullscreenchange -> irAlFormulario()
+      }else{
+        await enterFS(captura);
+        if(!document.fullscreenElement){
+          irAlFormulario();
+        }
       }
     });
 
-    // ESC: salir de FS (visor sigue)
-    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ exitFS(); } });
-
-    /* ======== Volver al formulario ======== */
+    /* Volver (flecha o atrás del SO) -> directo al formulario */
     async function volverAlFormulario(){
-      await exitFS();
-      inFS=false; scaleToNormal();
-      finish.style.display='none';
-      captura.style.display='none';
-      formScreen.style.display='flex';
-      document.body.style.background='#fff';
-      document.body.style.overflow='auto';
-      try{ history.replaceState({screen:'form'},''); }catch{}
+      await exitFS();     // fullscreenchange cerrará el visor y llamará irAlFormulario()
+      // Si no había FS (casos raros), nos aseguramos:
+      if(!document.fullscreenElement) irAlFormulario();
     }
     btnBack.addEventListener('click', volverAlFormulario);
     window.addEventListener('popstate', ()=>{ volverAlFormulario(); });
 
-    // Gesto deslizar para volver
+    // Gesto deslizar para volver (si estás viendo el comprobante)
     let startY=0;
     document.addEventListener('touchstart', e=>{ startY = e.touches[0].clientY; }, {passive:true});
     document.addEventListener('touchmove', e=>{
@@ -354,10 +334,8 @@
       if(dy>80 && captura.style.display==='block'){ volverAlFormulario(); }
     }, {passive:true});
 
-    // Reaplicar escala si la imagen termina de cargar en FS
     imgBase.addEventListener('load', ()=>{ if(inFS) scaleToFullscreen(); });
 
-    // Historial inicial
     try{ history.replaceState({screen:'form'},''); }catch{}
   </script>
 </body>
